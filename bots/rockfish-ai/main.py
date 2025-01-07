@@ -45,19 +45,26 @@ def round(previous_round: RoundResult | None):
     ##################################################
     #                   CODE HERE                    #
     
-    H='SCISSORS'
-    G='you'
-    C='PAPER'
-    B='ROCK'
-    A='opponent'
-    E=1
-    F=1
-    if round_index!=0:E=2 if previous_rounds[-1][A]==B else 5 if previous_rounds[-1][A]==C else 35;F=0 if previous_rounds[-1][G]==B else 1 if previous_rounds[-1][G]==C else 7
-    if len(previous_rounds)>=5 and all(B[A]==previous_rounds[-1][A]for B in previous_rounds[-5:]):
-        if previous_rounds[-1][A]==B:move=C
-        elif previous_rounds[-1][A]==C:move=H
-        else:move=B
-    else:I=sum([1 if A==B else 2 if A==H else 0 for A in[round[A]for round in previous_rounds]]);move=possible_moves[(E+F+I+round_index*(round_index+1))%3]
+    op = 1
+    pp = 1
+    if round_index != 0:
+        op = round_index+3 #2 if previous_rounds[-1]['opponent'] == 'ROCK' else 5 if previous_rounds[-1]['opponent'] == 'PAPER' else 35
+        pp = 3*round_index+7 #0 if previous_rounds[-1]['you'] == 'ROCK' else 1 if previous_rounds[-1]['you'] == 'PAPER' else 7
+
+    # Check if the last 5 opponent moves are the same
+    #if len(previous_rounds) >= 5 and all(past['opponent'] == previous_rounds[-1]['opponent'] for past in previous_rounds[-5:]):
+    #    # Pick the move that beats the repeated move
+    #    if previous_rounds[-1]['opponent'] == "ROCK":
+    #        move = "PAPER"
+    #    elif previous_rounds[-1]['opponent'] == "PAPER":
+    #        move = "SCISSORS"
+    #    else:  # SCISSORS
+    #
+    #        move = "ROCK"
+
+    # Default deterministic behavior
+    #sum_previous = sum([1 if m == "ROCK" else 2 if m == "SCISSORS" else 0 for m in [round['opponent'] for round in previous_rounds]])
+    move = possible_moves[(op + pp + round_index * (round_index + 1)) % 3]
     
 
     #                   STOP HERE                    #
