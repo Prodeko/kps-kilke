@@ -22,10 +22,11 @@ sio = socketio.Client(reconnection=True, reconnection_attempts=0)
 
 round_index = 0
 previous_rounds = [RoundResult]
+lucky_numbers = [26, 33, 77, 151, 2, 1050, 21, 2022, 3005, 53]
 
 ##################################################
 #                  CHANGE THIS                   #
-BOT_NAME = "example-python"
+BOT_NAME = "slaybot"
 ##################################################
 
 
@@ -45,7 +46,8 @@ def round(previous_round: RoundResult | None):
     ##################################################
     #                   CODE HERE                    #
 
-    move = possible_moves[round_index % len(possible_moves)]
+    number = lucky_numbers[round_index % len(lucky_numbers)]
+    move = possible_moves[number % len(possible_moves)]
 
     #                   STOP HERE                    #
     ##################################################
