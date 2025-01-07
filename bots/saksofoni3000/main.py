@@ -29,6 +29,16 @@ BOT_NAME = "Saksofoni 3000"
 ##################################################
 
 
+def convert_round_result_to_float(result: RoundResult | None) -> int | None:
+    if result is None:
+        return None
+    try:
+        index = possible_moves.index(RoundResult.opponent)
+    except AttributeError:
+        index = 0
+    return index
+
+
 @sio.event
 def connect():
     print("Connected to server")
@@ -38,14 +48,30 @@ def connect():
 @sio.event
 def round(previous_round: RoundResult | None):
     global round_index
-    print(previous_round)
     if previous_round:
         previous_rounds.append(previous_round)
 
     ##################################################
     #                   CODE HERE                    #
 
-    move = possible_moves[round_index % len(possible_moves)]
+    if round_index == 0:
+        move = "ROCK"
+    if round_index % 19 == 0:
+        move = "SCISSORS"
+    else:
+        counts = {"ROCK": 0, "PAPER": 0, "SCISSORS": 0}
+        for i, round in enumerate(previous_rounds):
+            try:
+                counts[round["opponent"]] += 1
+            except:
+                pass
+        max_hits_move, max_hits_count = max(counts.items(), key=lambda k: k[1])
+        if max_hits_move == "ROCK":
+            move = "PAPER"
+        elif max_hits_move == "PAPER":
+            move = "SCISSORS"
+        else:
+            move = "ROCK"
 
     #                   STOP HERE                    #
     ##################################################
