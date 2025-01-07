@@ -17,7 +17,7 @@ services:
 
   bot1:
     image: bot1
-    build: ${BOT_1_PATH}
+    build: "bots/godlikerainer"
     environment:
       - SERVER_URL=http://server:${SERVER_PORT}
     depends_on:
@@ -25,7 +25,7 @@ services:
 
   bot2:
     image: bot2
-    build: ${BOT_2_PATH}
+    build: "bots/rainer"
     environment:
       - SERVER_URL=http://server:${SERVER_PORT}
     depends_on:
