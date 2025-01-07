@@ -38,7 +38,7 @@ function App() {
 
     socket.on('rounds', (data: Round[]) => {
       console.log('rounds: ', data)
-      setRounds(data)
+      setRounds(data.reverse())
     })
 
     socket.on('result', (winningSide: Side) => {
@@ -59,8 +59,7 @@ function App() {
   return (
     <div className="App">
       <StartMatchButton onClick={handleStartClick} isDisabled={startDisabled} />
-      <RoundDisplay rounds={rounds} leftName={bots.left ?? 'Not connected'} rightName={bots.right ?? 'Not connected'}/>
-      {winningSide && <h2>Winner: {winningSide}</h2>}
+      <RoundDisplay rounds={rounds} winningSide={winningSide} leftName={bots.left ?? 'Not connected'} rightName={bots.right ?? 'Not connected'}/>
     </div>
   );
 }
