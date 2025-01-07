@@ -10,11 +10,13 @@ Move = Literal["ROCK", "PAPER", "SCISSORS"]
 Result = Literal["win", "loss", "draw"]
 possible_moves = list(get_args(Move))
 
+
 @dataclass
 class RoundResult:
-  you: Move
-  opponent: Move
-  result: Result
+    you: Move
+    opponent: Move
+    result: Result
+
 
 sio = socketio.Client(reconnection=True, reconnection_attempts=0)
 
@@ -26,35 +28,34 @@ previous_rounds = [RoundResult]
 BOT_NAME = "example-python"
 ##################################################
 
+
 @sio.event
 def connect():
-  print("Connected to server")
-  sio.emit("bot", BOT_NAME)
+    print("Connected to server")
+    sio.emit("bot", BOT_NAME)
+
 
 @sio.event
 def round(previous_round: RoundResult | None):
-  global round_index
-  print(previous_round)
-  if previous_round: previous_rounds.append(previous_round)
+    global round_index
+    print(previous_round)
+    if previous_round:
+        previous_rounds.append(previous_round)
 
-  ##################################################
-  #                   CODE HERE                    #
+    ##################################################
+    #                   CODE HERE                    #
 
-  
-  move = possible_moves[round_index % len(possible_moves)]
+    move = possible_moves[round_index % len(possible_moves)]
 
-  #                   STOP HERE                    #
-  ##################################################
+    #                   STOP HERE                    #
+    ##################################################
 
-  sio.emit("move", move)
-  round_index += 1
+    sio.emit("move", move)
+    round_index += 1
+    sio.wait()
+
 
 print(f"Trying to connect to {SERVER_URL}")
-connected = False
-while not connected:
-    try:
-        sio.connect(SERVER_URL)
-        connected = True
-    except Exception:
-        time.sleep(0.1)
-
+print("Trying to connect")
+sio.connect(SERVER_URL, retry=True, wait=True)
+sio.wait()
