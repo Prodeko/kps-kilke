@@ -8,6 +8,8 @@ export const Moves = {
   SCISSORS: 2,
 } as const
 
+const possibleMoves = Object.keys(Moves) as Move[]
+
 export type Move = keyof typeof Moves
 
 type RoundResult = {
@@ -22,16 +24,32 @@ function main() {
   socket.connect()
   
   let roundIndex = 0
+  const previousRounds: RoundResult[] = []
+  
+  /******************************************/
+  /*              CHANGE THIS               */
+  const BOT_NAME = "example-node"
+  /******************************************/
 
   socket.on('connect', () => {
     console.log("Connected to server")
-    socket.emit('bot', 'example-node')
+    socket.emit('bot', BOT_NAME)
   })
 
   socket.on('round', (previousRound: RoundResult | undefined) => {
     console.log(previousRound)
-    const possibleMoves = Object.keys(Moves) as Move[]
+    if (previousRound) previousRounds.push(previousRound)
+
+    /******************************************/
+    /*              CODE HERE                 */
+    
+    
     const move = possibleMoves[roundIndex % possibleMoves.length]
+    
+    
+    /*              STOP HERE                 */
+    /******************************************/    
+    
     socket.emit('move', move)
     roundIndex++
   })
