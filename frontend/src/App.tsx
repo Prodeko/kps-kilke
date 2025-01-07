@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client'
-import './App.css';
 import { SERVER_URL } from './config'; 
 import { Bots, Round, Side } from './types';
 import RoundDisplay from './RoundDisplay';
